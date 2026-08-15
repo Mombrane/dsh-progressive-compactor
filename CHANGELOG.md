@@ -17,7 +17,7 @@
 
 ### Fixed
 
-- 崩溃 / 重启后残留的压缩锁不再禁用 LLM 兜底（P2）：锁状态被正确清理 / 失效，避免 `agent/request-error` 上下文溢出恢复被永久跳过。
+- 崩溃 / 重启后残留的压缩锁不再永久禁用本插件八段式 LLM 兜底（P2）：`hasUnmatchedCompactionStart` 增加 `session/end-seed` 边界判断，上一个会话生命周期遗留的陈旧 `compaction/start` 被正确放行，与官方 `assertCompactionInactive` 语义对齐。
 
 ## [0.1.0] - 2026-08-15
 

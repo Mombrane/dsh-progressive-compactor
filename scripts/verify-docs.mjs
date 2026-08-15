@@ -2,7 +2,7 @@
 /**
  * Lightweight documentation gate for dsh-progressive-compactor.
  * Pure Node, zero dependencies. Checks:
- *   1. progressive-compactor.host.js VERSION === CHANGELOG top version
+ *   1. VERSION === CHANGELOG top version, and both READMEs carry the version
  *   2. README.md / README.en.md bilingual pairing (when --changed is passed)
  *   3. Relative markdown links resolve to existing files
  *
@@ -18,22 +18,36 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const errors = []
 const fail = (msg) => errors.push(msg)
 
-// --- 1. VERSION / CHANGELOG consistency --------------------------------------
+// --- 1. VERSION / CHANGELOG / README version alignment -----------------------
 const srcPath = join(ROOT, 'progressive-compactor.host.js')
 const changelogPath = join(ROOT, 'CHANGELOG.md')
+let version = null
 if (!existsSync(srcPath)) {
   fail('progressive-compactor.host.js is missing')
 } else {
   const src = readFileSync(srcPath, 'utf8')
   const m = /const VERSION\s*=\s*'([^']+)'/.exec(src)
   if (!m) fail('progressive-compactor.host.js: missing const VERSION = "x.y.z"')
-  else if (!existsSync(changelogPath)) {
+  else version = m[1]
+}
+if (version !== null) {
+  if (!existsSync(changelogPath)) {
     fail('CHANGELOG.md is missing')
   } else {
     const changelog = readFileSync(changelogPath, 'utf8')
     const top = /^## \[(\d+\.\d+\.\d+)\]/m.exec(changelog)
     if (!top) fail('CHANGELOG.md: no `## [x.y.z]` version heading found')
-    else if (top[1] !== m[1]) fail(`version mismatch: CHANGELOG top is [${top[1]}], VERSION is ${m[1]}`)
+    else if (top[1] !== version) fail(`version mismatch: CHANGELOG top is [${top[1]}], VERSION is ${version}`)
+  }
+  const versionBold = `**${version}**`
+  for (const readme of ['README.md', 'README.en.md']) {
+    const readmePath = join(ROOT, readme)
+    if (!existsSync(readmePath)) {
+      fail(`missing doc file: ${readme}`)
+      continue
+    }
+    const text = readFileSync(readmePath, 'utf8')
+    if (!text.includes(versionBold)) fail(`${readme}: current-version line must contain ${versionBold}`)
   }
 }
 

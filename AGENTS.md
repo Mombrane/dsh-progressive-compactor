@@ -28,4 +28,4 @@ node scripts/verify-docs.mjs                # 文档门禁（版本 / 双语 / �
 
 ## 门禁
 
-`.github/workflows/verify-docs.yml` 在 PR 与 main 推送时运行：`node --check` 语法检查 + `scripts/verify-docs.mjs`（版本一致、双语成对、相对链接）。
+`.github/workflows/verify-docs.yml` 在 PR 与 main 推送时运行：`node --check` 语法检查 + `scripts/verify-docs.mjs`（源码/CHANGELOG/README 三处版本一致、相对链接；双语成对检查仅在 PR 模式执行）。

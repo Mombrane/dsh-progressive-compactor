@@ -78,3 +78,7 @@ DeepSeek Harness (DSH) 动态 Cordis 插件:**渐进式、类型感知的上下�
 ## 设计动机
 
 详见 [DESIGN.md](./DESIGN.md):为什么"保留完整用户输入+模型输出、只动态压缩工具结果"在长程任务上优于全量归纳式摘要,以及渐进阶梯、召回指针、八段式兜底之间的取舍。
+
+## License
+
+[MIT](./LICENSE) © Mombrane

@@ -38,6 +38,9 @@ const CONFIG = {
   maxDegradationsPerPass: 30,
 }
 
+// 版本号唯一事实源:与 CHANGELOG 最新条目、git tag 三处一致(verify-docs 门禁校验)
+const VERSION = '0.1.1'
+
 const PRUNE_MARKER = '\n\n[... tool result middle pruned ...]\n\n'
 const FACT_PREFIX = '[compacted-result] '
 
@@ -516,6 +519,6 @@ return {
       }
       return next()
     }, { prepend: true })
-    console.log('[prog-compact] 已挂载:渐进式压缩器(context_recall 工具 + agent/pre-step 监听)')
+    console.log('[prog-compact v' + VERSION + '] 已挂载:渐进式压缩器(context_recall 工具 + agent/pre-step 监听)')
   },
 }

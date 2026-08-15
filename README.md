@@ -1,5 +1,7 @@
 # dsh-progressive-compactor
 
+[English](README.en.md) | **中文**
+
 DeepSeek Harness (DSH) 动态 Cordis 插件:**渐进式、类型感知的上下文压缩器**。
 
 与内置 `compaction-basic`(80% 触发时把整段历史归纳成八段式 LLM 检查点)不同,本插件:
@@ -68,6 +70,10 @@ DeepSeek Harness (DSH) 动态 Cordis 插件:**渐进式、类型感知的上下�
 - 包含图片等非文本块的工具结果,在单元折叠时其图片会从 surface 消失(原始事件仍在日志中);
 - 插件作用于进程中**所有** agent 的会话(单用户 DSH 即当前会话);
 - 召回 id 为区间 seq 编码(`r<start>-<end>`),同一会话内稳定且重启后有效。
+
+## 📋 更新记录
+
+变更历史见 [CHANGELOG.md](./CHANGELOG.md)。当前版本 **0.1.1**（与源码 `const VERSION` 对齐）。
 
 ## 设计动机
 

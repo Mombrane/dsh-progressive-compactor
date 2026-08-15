@@ -265,11 +265,20 @@ function sameSurface(a, b) {
 }
 
 function hasUnmatchedCompactionStart(session) {
+  // 与官方 assertCompactionInactive(region.ts)对齐:日志尾部最新的
+  // session/end-seed 晚于残留的 compaction/start 时,该锁属于上一个会话
+  // 生命周期(崩溃/重启残留),视为无锁,避免 LLM 兜底被永久禁用。
   const events = session.events
+  let latestEndSeedSeq = undefined
   for (let i = events.length - 1; i >= 0; i--) {
     const event = events[i]
     if (!event) continue
-    if (event.type === 'compaction/start') return true
+    if (latestEndSeedSeq === undefined && event.type === 'session/end-seed') {
+      latestEndSeedSeq = event.seq
+    }
+    if (event.type === 'compaction/start') {
+      return !(latestEndSeedSeq !== undefined && latestEndSeedSeq > event.seq)
+    }
     if (event.type === 'compaction/end') return false
   }
   return false
